@@ -1,4 +1,5 @@
-import { IProduct } from '../interfaces';
+import jwt from 'jsonwebtoken';
+import { IProduct, UserCredentials } from '../interfaces';
 import * as productModel from '../models/productModel';
 // import connection from './connection';
 
@@ -6,16 +7,16 @@ import * as productModel from '../models/productModel';
 //   RESTAURANT_NOT_FOUND: 'Restaurant not found',
 // };
 
-// import jwt, { secret, config } from '../middlewares/jwtConfig';
+import { secret, config } from '../middlewares/jwtConfig';
 
 // import IToken from '../interfaces/IToken';
 
-// const MESSAGES = {
+const MESSAGES = {
 //   USER_NOT_FOUND: 'User not found',
 //   UNAUTHORIZED: 'Invalid email or password',
-//   USER_EXISTS: 'User already exists',
+  USER_EXISTS: 'User already exists',
 //   FORBIDDEN: 'You are not allowed to take this action',
-// };
+};
 
 export async function getAll() {
   const data = await productModel.getAll();
@@ -24,6 +25,18 @@ export async function getAll() {
 
 export async function createProduct(product: IProduct) {
   const data = await productModel.create(product);
+  return { status: 201, data };
+}
+
+export async function createUser(user: UserCredentials) {
+  const userExists = await productModel.getByUsername(user.username);
+  if (userExists) {
+    return { status: 400, error: { message: MESSAGES.USER_EXISTS } };
+  }
+
+  const payload = await productModel.createUser(user);
+  const token = jwt.sign({ payload }, secret, config);
+  const data = { token, ...payload };
   return { status: 201, data };
 }
 

@@ -6,7 +6,9 @@ import * as productController from '../controllers/productController';
 const router = Router();
 
 router.get('/products', productController.getAll);
+// router.get('/orders', productController.getAll);
 router.post('/products', productController.createProduct);
+router.post('/users', productController.createUser);
 // router.get('/:id', restaurantController.getById);
 // router.get('/', restaurantController.getAll);
 // router.delete('/:id', restaurantController.remove);
