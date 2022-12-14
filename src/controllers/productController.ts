@@ -8,6 +8,11 @@ export async function getAll(_req: Request, res: Response) {
   res.status(status).json(data);
 }
 
+export async function getAllOrders(_req: Request, res: Response) {
+  const { status, data } = await productService.getAllOrders();
+  res.status(status).json(data);
+}
+
 export async function createProduct(req: Request, res: Response) {
   const product = req.body as IProduct;
   const { status, data } = await productService.createProduct(product);

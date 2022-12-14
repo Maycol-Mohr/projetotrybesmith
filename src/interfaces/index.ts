@@ -18,3 +18,9 @@ export interface UserCredentials {
 export interface User extends UserCredentials {
   id: number;
 }
+
+export interface IOrder {
+  id: number;
+  userId: number;
+  productsIds: number[];
+}

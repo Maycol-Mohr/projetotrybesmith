@@ -2,7 +2,7 @@ import { ResultSetHeader } from 'mysql2';
 
 import connection from './connection';
 // import { IProduct, Product, IUser, User } from '../interfaces';
-import { Product, IProduct, UserCredentials, User } from '../interfaces';
+import { Product, IProduct, UserCredentials, User, IOrder } from '../interfaces';
 // import { IUser, User } from '../interfaces';
 // import { Product } from '../interfaces';
 
@@ -12,6 +12,18 @@ export async function getAll(): Promise<Product[]> {
   const [data] = await connection.execute(query);
 
   return data as Product[];
+}
+
+export async function getAllOrders(): Promise<IOrder[]> {
+  const query = `SELECT ord.id as id, ord.user_id as userId, JSON_ARRAYAGG(prod.id) as productsIds
+  FROM Trybesmith.orders as ord
+  INNER JOIN Trybesmith.products as prod
+  ON prod.order_id = ord.id
+  GROUP BY ord.id, ord.user_id`;
+
+  const [data] = await connection.execute(query);
+
+  return data as IOrder[];
 }
 
 export async function create(product: IProduct): Promise<Product> {

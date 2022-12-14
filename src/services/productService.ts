@@ -23,6 +23,11 @@ export async function getAll() {
   return { status: 200, data };
 }
 
+export async function getAllOrders() {
+  const data = await productModel.getAllOrders();
+  return { status: 200, data };
+}
+
 export async function createProduct(product: IProduct) {
   const data = await productModel.create(product);
   return { status: 201, data };
