@@ -1,4 +1,4 @@
-// import { IProduct, UserCredentials, IUser, User } from '../interfaces';
+import { IProduct } from '../interfaces';
 import * as productModel from '../models/productModel';
 // import connection from './connection';
 
@@ -22,6 +22,23 @@ export async function getAll() {
   return { status: 200, data };
 }
 
+export async function createProduct(product: IProduct) {
+  const data = await productModel.create(product);
+  return { status: 201, data };
+}
+
+// export async function createUser(user: IUser) {
+//   const userExists = await productModel.getByUsername(user.username);
+//   if (userExists) {
+//     return { status: 400, error: { message: MESSAGES.USER_NOT_FOUND } };
+//   }
+
+//   const payload = await productModel.create(user);
+//   const token = jwt.sign({ payload }, secret, config);
+//   const data = { token, ...payload };
+//   return { status: 201, data };
+// }
+
 // // export async function getById(id: number) {
 // //   const data = await restaurantModel.getById(id);
 
@@ -37,23 +54,6 @@ export async function getAll() {
 //   const [user] = data as User[];
 
 //   return user || null;
-// }
-
-// export async function create(product: IProduct) {
-//   const data = await productModel.create(product);
-//   return { status: 201, data };
-// }
-
-// export async function createUser(user: IUser) {
-//   const userExists = await productModel.getByUsername(user.username);
-//   if (userExists) {
-//     return { status: 400, error: { message: MESSAGES.USER_NOT_FOUND } };
-//   }
-
-//   const payload = await productModel.create(user);
-//   const token = jwt.sign({ payload }, secret, config);
-//   const data = { token, ...payload };
-//   return { status: 201, data };
 // }
 
 // export async function update(id: number, restaurant: IRestaurant) {

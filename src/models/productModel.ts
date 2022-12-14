@@ -1,8 +1,8 @@
-// import { ResultSetHeader } from 'mysql2';
+import { ResultSetHeader } from 'mysql2';
 
 import connection from './connection';
 // import { IProduct, Product, IUser, User } from '../interfaces';
-import { Product } from '../interfaces';
+import { Product, IProduct } from '../interfaces';
 // import { IUser, User } from '../interfaces';
 // import { Product } from '../interfaces';
 
@@ -14,6 +14,20 @@ export async function getAll(): Promise<Product[]> {
   return data as Product[];
 }
 
+export async function create(product: IProduct): Promise<Product> {
+  const { name, amount } = product;
+
+  const query = `INSERT INTO Trybesmith.products (name, amount)
+    VALUES (?, ?)`;
+  const values = [name, amount];
+
+  const [result] = await connection.execute<ResultSetHeader>(query, values);
+  const { insertId: id } = result;
+
+  const newProduct: Product = { id, ...product };
+  return newProduct;
+}
+
 // export async function getById(id: number): Promise<Restaurant | null> {
 //   const query = 'SELECT * FROM Restaurants WHERE id = ?';
 //   const values = [id];
@@ -22,20 +36,6 @@ export async function getAll(): Promise<Product[]> {
 //   const [restaurant] = data as Restaurant[];
 
 //   return restaurant || null;
-// }
-
-// export async function create(product: IProduct): Promise<Product> {
-//   const { name, amount } = product;
-
-//   const query = `INSERT INTO products (name, amount)
-//     VALUES (?, ?, ?, ?)`;
-//   const values = [name, amount];
-
-//   const [result] = await connection.execute<ResultSetHeader>(query, values);
-//   const { insertId: id } = result;
-
-//   const newProduct: Product = { id, ...product };
-//   return newProduct;
 // }
 
 // export async function createUser(user: IUser): Promise<User> {
