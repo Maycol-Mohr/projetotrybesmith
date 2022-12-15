@@ -13,8 +13,9 @@ import { secret, config } from '../middlewares/jwtConfig';
 
 const MESSAGES = {
 //   USER_NOT_FOUND: 'User not found',
-//   UNAUTHORIZED: 'Invalid email or password',
+  UNAUTHORIZED: 'Invalid email or password',
   USER_EXISTS: 'User already exists',
+  USERNAME_PASSWORD_INVALID: 'Username or password invalid',
 //   FORBIDDEN: 'You are not allowed to take this action',
 };
 
@@ -41,56 +42,19 @@ export async function createUser(user: UserCredentials) {
 
   const payload = await productModel.createUser(user);
   const token = jwt.sign({ payload }, secret, config);
-  const data = { token, ...payload };
+  // const data = { token, ...payload };
+  const data = { token };
   return { status: 201, data };
 }
 
-// export async function createUser(user: IUser) {
-//   const userExists = await productModel.getByUsername(user.username);
-//   if (userExists) {
-//     return { status: 400, error: { message: MESSAGES.USER_NOT_FOUND } };
-//   }
+export async function login(userCredentials: UserCredentials) {
+  const data = await productModel
+    .getByUsernameAndPassword(userCredentials.username, userCredentials.password);
 
-//   const payload = await productModel.create(user);
-//   const token = jwt.sign({ payload }, secret, config);
-//   const data = { token, ...payload };
-//   return { status: 201, data };
-// }
+  if (data === null || data.password !== userCredentials.password) {
+    return { status: 401, error: { message: MESSAGES.USERNAME_PASSWORD_INVALID } };
+  }
 
-// // export async function getById(id: number) {
-// //   const data = await restaurantModel.getById(id);
-
-// //   if (data === null) return { status: 404, error: { message: MESSAGES.RESTAURANT_NOT_FOUND } };
-// //   return { status: 200, data };
-// // }
-
-// export async function getByUsername(username: string): Promise<User | null> {
-//   const query = 'SELECT * FROM Users WHERE email = ?';
-//   const values = [username];
-
-//   const [data] = await connection.execute(query, values);
-//   const [user] = data as User[];
-
-//   return user || null;
-// }
-
-// export async function update(id: number, restaurant: IRestaurant) {
-//   const data = await restaurantModel.update(id, restaurant);
-
-//   if (data === null) return { status: 404, error: { message: MESSAGES.RESTAURANT_NOT_FOUND } };
-//   return { status: 200, data };
-// }
-
-// export async function remove(id: number) {
-//   const data = await restaurantModel.remove(id);
-
-//   if (data === null) return { status: 404, error: { message: MESSAGES.RESTAURANT_NOT_FOUND } };
-//   return { status: 200, data };
-// }
-
-// export async function getAllOpen() {
-//   const data = await restaurantModel.getAllOpen();
-
-//   if (!data.length) return { status: 404, error: { message: MESSAGES.RESTAURANT_NOT_FOUND } };
-//   return { status: 200, data };
-// }
+  const token = jwt.sign({ data }, secret, config);
+  return { status: 200, data: { token } };
+}
