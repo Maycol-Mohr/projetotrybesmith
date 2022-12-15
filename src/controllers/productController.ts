@@ -35,3 +35,9 @@ export async function login(req: Request, res: Response) {
   return error ? res.status(status)
     .json({ message: error.message }) : res.status(status).json(data);
 }
+
+export async function createOrder(req: Request, res: Response) {
+  const { productsIds, user: { id: userId } } = req.body;
+  const { status, data } = await productService.createOrder({ userId, productsIds });
+  res.status(status).json(data);
+}

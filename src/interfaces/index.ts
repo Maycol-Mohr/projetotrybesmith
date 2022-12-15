@@ -20,7 +20,7 @@ export interface User extends UserCredentials {
 }
 
 export interface IOrder {
-  id: number;
+  id?: number;
   userId: number;
   productsIds: number[];
 }

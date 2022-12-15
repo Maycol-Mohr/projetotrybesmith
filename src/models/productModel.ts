@@ -70,3 +70,19 @@ export async function createUser(user: UserCredentials): Promise<User> {
   const newUser: User = { id, username, vocation, level, password };
   return newUser;
 }
+
+export async function createOrder(order: IOrder): Promise<IOrder> {
+  const { userId, productsIds } = order;
+
+  const query = `INSERT INTO Trybesmith.orders (user_id)
+    VALUES (?)`;
+  // const values = [userId, productsIds];
+
+  const [{ insertId }] = await connection.execute<ResultSetHeader>(query, [userId]);
+  // const { insertId: id } = result;
+  await Promise.all(productsIds.map(async (id) => connection
+    .execute('UPDATE Trybesmith.products SET order_id = ? WHERE id = ?', [insertId, id])));
+
+  const newOrder: IOrder = { userId, productsIds };
+  return newOrder;
+}

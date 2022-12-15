@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { IProduct, UserCredentials } from '../interfaces';
+import { IOrder, IProduct, UserCredentials } from '../interfaces';
 import * as productModel from '../models/productModel';
 // import connection from './connection';
 
@@ -55,6 +55,11 @@ export async function login(userCredentials: UserCredentials) {
     return { status: 401, error: { message: MESSAGES.USERNAME_PASSWORD_INVALID } };
   }
 
-  const token = jwt.sign({ data }, secret, config);
+  const token = jwt.sign({ data: { id: data.id, username: data.username } }, secret, config);
   return { status: 200, data: { token } };
+}
+
+export async function createOrder(order: IOrder) {
+  const data = await productModel.createOrder(order);
+  return { status: 201, data };
 }
