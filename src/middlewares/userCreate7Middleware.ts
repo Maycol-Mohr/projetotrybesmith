@@ -1,3 +1,25 @@
+import { NextFunction, Request, Response } from 'express';
+import Joi from 'joi';
+
+const productSchema = Joi.object(
+  {
+    username: Joi.string().min(3).required(),
+    vocation: Joi.string().min(3).required(),
+    level: Joi.number().min(1).required(),
+    password: Joi.string().min(8).required(),
+  },
+);
+const validateProduct = (req: Request, res: Response, next: NextFunction) => {
+  const { error } = productSchema.validate(req.body);
+  if (error) {
+    const [details] = error.details;
+    const statusCode = details.type === 'any.required' ? 400 : 422; 
+    return res.status(statusCode).json({ message: error.message });
+  }
+  next();
+};
+export default validateProduct;
+
 // import { NextFunction, Request, Response } from 'express';
 
 // import { User } from '../interfaces';
@@ -44,47 +66,50 @@
 //   return null;
 // }
 
-// // function validateIsRequired(username: string, vocation: string, level: number, password: string) {
-// //   if (!username) {
-// //     const message = '"username" is required';
-// //     return ({ status: 400, message });
-// //   }
-// //   if (!vocation) {
-// //     const message = '"vocation" is required';
-// //     return ({ status: 400, message });
-// //   }
-// //   if (!level) {
-// //     const message = '"level" is required';
-// //     return ({ status: 400, message });
-// //   }
-// //   if (!password) {
-// //     const message = '"password" is required';
-// //     return ({ status: 400, message });
-// //   }
-      
-// //   return null;
-// // }
-
-// export default function validateRequired(req: Request, res: Response, next: NextFunction) {
-//   const { username, vocation, level, password } = req.body as User;
+// function validateIsRequired(username: string, vocation: string, level: number, password: string) {
 //   if (!username) {
 //     const message = '"username" is required';
-//     return res.status(400).json({ message });
+//     return ({ status: 400, message });
 //   }
 //   if (!vocation) {
 //     const message = '"vocation" is required';
-//     return res.status(400).json({ message });
+//     return ({ status: 400, message });
 //   }
-//   if (!level) {
+//   if (level !== 0 && !level) {
 //     const message = '"level" is required';
-//     return res.status(400).json({ message });
+//     return ({ status: 400, message });
 //   }
 //   if (!password) {
 //     const message = '"password" is required';
-//     return res.status(400).json({ message });
+//     return ({ status: 400, message });
 //   }
+//   return null;
+// }
+
+// export default function validateRequired(req: Request, res: Response, next: NextFunction) {
+//   const { username, vocation, level, password } = req.body as User;
+//   // if (!username) {
+//   //   const message = '"username" is required';
+//   //   return res.status(400).json({ message });
+//   // }
+//   // if (!vocation) {
+//   //   const message = '"vocation" is required';
+//   //   return res.status(400).json({ message });
+//   // }
+//   // if (!level) {
+//   //   const message = '"level" is required';
+//   //   return res.status(400).json({ message });
+//   // }
+//   // if (!password) {
+//   //   const message = '"password" is required';
+//   //   return res.status(400).json({ message });
+//   // }
+
+//   let error = validateIsRequired(username, vocation, level, password);
   
-//   let error = validateItemsString(username, vocation, level, password);
+//   if (error) return res.status(error.status).json({ message: error.message });
+  
+//   error = validateItemsString(username, vocation, level, password);
   
 //   if (error) return res.status(error.status).json({ message: error.message });
   
@@ -92,31 +117,5 @@
   
 //   if (error) return res.status(error.status).json({ message: error.message });
 
-//   //   error = validateIsRequired(username, vocation, level, password);
-  
-//   //   if (error) return res.status(error.status).json({ message: error.message });
-  
 //   next();
 // }
-
-import { NextFunction, Request, Response } from 'express';
-import Joi from 'joi';
-
-const productSchema = Joi.object(
-  {
-    username: Joi.string().min(3).required(),
-    vocation: Joi.string().min(3).required(),
-    level: Joi.number().min(1).required(),
-    password: Joi.string().min(8).required(),
-  },
-);
-const validateProduct = (req: Request, res: Response, next: NextFunction) => {
-  const { error } = productSchema.validate(req.body);
-  if (error) {
-    const [details] = error.details;
-    const statusCode = details.type === 'any.required' ? 400 : 422; 
-    return res.status(statusCode).json({ message: error.message });
-  }
-  next();
-};
-export default validateProduct;
