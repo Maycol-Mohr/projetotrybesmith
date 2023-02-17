@@ -12,3 +12,10 @@ export async function createProduct(req: Request, res: Response) {
   const { status, data } = await productService.createProduct(product);
   res.status(status).json(data);
 }
+
+export async function getById(req: Request, res: Response) {
+  const { id } = req.params;
+  const { status, data, error } = await productService.getById(Number(id));
+
+  return error ? res.status(status).json({ error }) : res.status(status).json(data);
+}

@@ -7,7 +7,7 @@ import { secret, config } from '../middlewares/jwtConfig';
 // import IToken from '../interfaces/IToken';
 
 const MESSAGES = {
-//   USER_NOT_FOUND: 'User not found',
+  USER_NOT_FOUND: 'User not found',
   UNAUTHORIZED: 'Invalid email or password',
   USER_EXISTS: 'User already exists',
   USERNAME_PASSWORD_INVALID: 'Username or password invalid',
@@ -37,4 +37,16 @@ export async function login(userCredentials: UserCredentials) {
 
   const token = jwt.sign({ data: { id: data.id, username: data.username } }, secret, config);
   return { status: 200, data: { token } };
+}
+
+export async function getAll() {
+  const data = await userModel.getAll();
+  return { status: 200, data };
+}
+
+export async function getById(id: number) {
+  const data = await userModel.getById(id);
+
+  if (data === null) return { status: 404, error: { message: MESSAGES.USER_NOT_FOUND } };
+  return { status: 200, data };
 }

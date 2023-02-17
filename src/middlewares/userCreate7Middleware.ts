@@ -20,6 +20,17 @@ const validateProduct = (req: Request, res: Response, next: NextFunction) => {
 };
 export default validateProduct;
 
+// const validateProduct = (req: Request, res: Response, next: NextFunction) => {
+//   const { error } = productSchema.validate(req.body);
+//   if (error) {
+//     const [details] = error.details;
+//     const statusCode = details.type === 'any.required' ? 400 : 422; 
+//     return res.status(statusCode).json({ message: error.message });
+//   }
+//   next();
+// };
+// export default validateProduct;
+
 // import { NextFunction, Request, Response } from 'express';
 
 // import { User } from '../interfaces';

@@ -23,3 +23,13 @@ export async function createProduct(product: IProduct): Promise<Product> {
   const newProduct: Product = { id, ...product };
   return newProduct;
 }
+
+export async function getById(id: number): Promise<Product | null> {
+  const query = 'SELECT * FROM Trybesmith.products WHERE id = ?';
+  const values = [id];
+
+  const [data] = await connection.execute(query, values);
+  const [user] = data as Product[];
+
+  return user || null;
+}

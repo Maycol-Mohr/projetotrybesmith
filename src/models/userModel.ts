@@ -36,3 +36,21 @@ getByUsernameAndPassword(username: string, password: string): Promise<User | nul
 
   return user || null;
 }
+
+export async function getAll(): Promise<User[]> {
+  const query = 'SELECT * FROM Trybesmith.users';
+
+  const [data] = await connection.execute(query);
+
+  return data as User[];
+}
+
+export async function getById(id: number): Promise<User | null> {
+  const query = 'SELECT * FROM Trybesmith.users WHERE id = ?';
+  const values = [id];
+
+  const [data] = await connection.execute(query, values);
+  const [user] = data as User[];
+
+  return user || null;
+}

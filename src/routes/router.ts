@@ -12,6 +12,9 @@ import validateJWT from '../auth/validateJWT';
 const router = Router();
 
 router.get('/products', productController.getAll);
+router.get('/users', validateJWT, userController.getAll);
+router.get('/users/:id', validateJWT, userController.getById);
+router.get('/products/:id', validateJWT, productController.getById);
 router.get('/orders', orderController.getAllOrders);
 router.post('/login', userMiddleware, userController.login);
 router.post('/products', productMiddleware, productController.createProduct);
