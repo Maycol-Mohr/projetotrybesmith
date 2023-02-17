@@ -1,4 +1,6 @@
-# :construction: README customizado em construção ! :construction:
+# Projeto Trybesmith
+
+Este Projeto foi desenvolvido utilizando os princípios REST e novamente com a arquitetura MSC (Model, Service, Controller), aplicando os conceitos de classes.
 <!-- Olá, Tryber!
 Esse é apenas um arquivo inicial para o README do seu projeto no qual você pode customizar e reutilizar todas as vezes que for executar o trybe-publisher.
 
